@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Watch Any Courses Tutorials</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/gh/loadingio/ldLoader@v1.0.0/dist/ldld.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.css"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/gh/ddpanda/plapla@main/playerjs(8).js"
+      type="text/javascript"
+    ></script>
+  </head>
+  <body>
+    <main class="min-h-screen bg-gray-400 p-4">
+      <div id="loader" class="text-danger ldld full"></div>
+      <section>
+        <div class="bg-white rounded p-4">
+          <form class="flex items-center">
+            <label for="simple-search" class="sr-only">Search</label>
+            <div class="relative w-full">
+              <div
+                class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="w-5 h-5 text-gray-500 dark:text-gray-400"
+                  fill="currentColor"
+                  viewbox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+              </div>
+              <input
+                type="text"
+                id="search"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Search"
+                required
+              />
+            </div>
+            <button
+              type="submit"
+              class="p-2.5 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+              onclick="searchLoad(event)"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewbox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                ></path>
+              </svg>
+              <span class="sr-only">Search</span>
+            </button>
+          </form>
+          <p
+            id="helper-text-explanation"
+            class="m-2 text-sm text-gray-500 dark:text-gray-400"
+          >
+            enter link of the course page. example:
+            <span class="italic text-xs"
+              > Base64 lik due to security reason (aHR0cHM6Ly93d3cudGhlZ3JlYXRjb3Vyc2VzcGx1cy5jb20vY3JlYXRpb24tc3Rvcmllcy1vZi10aGUtYW5jaWVudC13b3JsZC8=)</span
+            >
+          </p>
+        </div>
+      </section>
+      <section id="loadBox" class="bg-white p-4 my-6 rounded">
+        <div id="player"></div>
+      </section>
+      <section id="resultbox" class="my-6">
+        <div class>
+          <ul class="grid md:grid-cols-1 gap-2" id="listBox"></ul>
+        </div>
+      </section>
+    </main>
+    <script
+      src="https://cdn.jsdelivr.net/gh/loadingio/ldLoader@v1.0.0/dist/ldld.min.js"
+      type="text/javascript"
+    ></script>
+    <script type="text/javascript">
+      var player = new Playerjs({
+        id: "player",
+        file: "",
+      });
+      document.getElementById("loadBox").style.display = "none";
+      let ldld = new ldLoader({ root: "#loader" });
+
+      function loadVideo(a) {
+        ldld.on();
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("loadBox").style.display = "block";
+            player.api("play", xhttp.responseText);
+            ldld.off();
+          }
+        };
+        xhttp.open("GET", "https://story.ddpanda.net/wondrPlay/" + a, true);
+        xhttp.send();
+      }
+
+      function searchLoad(e) {
+        e.preventDefault();
+        let searchText = document.getElementById("search").value;
+        ldld.on();
+        player.api("stop");
+        document.getElementById("loadBox").style.display = "none";
+        document.getElementById("search").value = "";
+        const pathname = new URL(searchText).pathname;
+        const slug = pathname.split("/").filter(Boolean)[0];
+        let xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("listBox").innerHTML = xhttp.responseText;
+            ldld.off();
+            return false;
+          }
+        };
+        xhttp.open("GET", "https://story.ddpanda.net/wondr/" + slug, true);
+        xhttp.send();
+      }
+    </script>
+  </body>
+</html>
