@@ -1,5 +1,3 @@
-Is image me **WinPE (Strelec type) diagnostics menu** dikh raha hai. Right side me jo **diagnosis / testing software** clearly nazar aa rahe hain, unke naam niche list kar raha hoon (as-is from screen):
-
 ### **Hardware / System Diagnosis Software (List):**
 
 1. **AIDA64 6.00.8000**
